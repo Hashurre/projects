@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<head>
+<title>2D HeatMap</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style>
+    canvas {
+        border: 1px solid black;
+    }
+</style>
+</head>
+<body>
+<!--Canvas element is used for drawing with dimensions 400 x 400. This can be changed through passing info-->
+<canvas id="roomCanvas" width="400" height="400"></canvas>
+<!--JS script for logic-->
+<script>
+    // variable canvas retrieves the canvas element from our HTML document
+    var canvas = document.getElementById('roomCanvas');
+    //variable ctx gets the context of the canvas
+    var ctx = canvas.getContext('2d');
+
+    // define 2 variables which sets room width and height. This can be changed through passing info
+    var roomWidth = 400;
+    var roomHeight = 400;
+
+    // function to draw the room
+    function drawGrid() {
+        //clear the rectangle area/ make it fully transparent according to the dimensions.
+        ctx.clearRect(0, 0, roomWidth, roomHeight);
+
+        // draw room outline
+        ctx.strokeRect(0, 0, roomWidth, roomHeight);
+
+        // Daw vertical grid lines; starts with x iterates till room width; with step as 20px; Each iteration move drawing cursor to x, then draw line down to room height
+        for (var x = 0; x <= roomWidth; x += 20) {
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, roomHeight);
+        }
+        // Daw horizontal grid lines; starts with y iterates till room height; with step as 20px; Each iteration move drawing cursor to y, then draw line down to room width
+        for (var y = 0; y <= roomHeight; y += 20) {
+            ctx.moveTo(0, y);
+            ctx.lineTo(roomWidth, y);
+        }
+
+        //line colors
+        ctx.strokeStyle = "#ddd";
+        //draw said lines
+        ctx.stroke();
+    }
+    function midLines() {
+        //clear the rectangle area/ make it fully transparent according to the dimensions.
+        // draw room outline
+        
+        // Daw vertical grid lines; starts with x iterates till room width; with step as 20px; Each iteration move drawing cursor to x, then draw line down to room height
+        for (var x = 0; x <= roomWidth; x += 100) {
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, roomHeight);
+        }
+        // Daw horizontal grid lines; starts with y iterates till room height; with step as 20px; Each iteration move drawing cursor to y, then draw line down to room width
+        for (var y = 0; y <= roomHeight; y += 100) {
+            ctx.moveTo(0, y);
+            ctx.lineTo(roomWidth, y);
+        }
+
+        ctx.strokeStyle = "black";
+        ctx.stroke();
+
+        //line colors
+        //draw said lines
+
+
+    }
+
+    // functions which we can add any object through; artifacts; people; we can pass info to it
+    function addObject(x, y, width, height, color) {
+        ctx.fillStyle = color;
+        ctx.fillRect(x, y, width, height);
+    }
+    function addArtifact(x,y) {
+        ctx.fillStyle = "blue"
+        ctx.fillRect(x,y,20,20)
+    }
+    function addBLE(x,y) {
+        ctx.fillStyle = "purple"
+        ctx.fillRect(x,y,5,5)
+    }
+    function addVisitor(visitorList, highColor, mediumColor, lowColor, highMin, lowMax) {
+        while (visitorList.length > 0) {
+            var pair = visitorList[0];
+            plotAr = [pair];
+            var count = 1;
+            for (var j = 1; j < visitorList.length; j += 1) {
+                col = pair[0];
+                row = pair[1];
+                var zone = [
+                    Math.round(col / 100) * 100,
+                    Math.round(row / 100) * 100,
+                ];
+                var otherPairs = visitorList[j];
+                oCol = otherPairs[0];
+                oRow = otherPairs[1];
+                var oZone = [
+                    Math.round(oCol / 100) * 100,
+                    Math.round(oRow / 100) * 100,
+                ];
+                if (zone[0] == oZone[0] && zone[1] == oZone[1]) {
+                    sameZonePair = visitorList.splice(j, 1);
+                    plotAr.push(sameZonePair);
+                    count += 1;
+                    j -= 1;
+                }
+            }
+            if (count >= highMin) {
+                for (k = 0; k < plotAr.length; k += 1) {
+                    var x = -1;
+                    var y = -1;
+                    if (k==0) {
+                        t = plotAr[k];
+                        x = t[0];
+                        y = t[1];
+                    }
+                    else {
+                        t = plotAr[k][0];
+                        x = t[0];
+                        y = t[1];
+                    }
+                    ctx.fillStyle = highColor;
+                    ctx.fillRect(x, y, 10, 10);
+                }
+            }
+            else if (count <= lowMax) {
+                for (k = 0; k < plotAr.length; k += 1) {
+                    var x = -1;
+                    var y = -1;
+                    if (k==0) {
+                        t = plotAr[k];
+                        x = t[0];
+                        y = t[1];
+                    }
+                    else {
+                        t = plotAr[k][0];
+                        x = t[0];
+                        y = t[1];
+                    }
+                    ctx.fillStyle = lowColor;
+                    ctx.fillRect(x, y, 10, 10);
+                }
+            }
+            else {
+                for (k = 0; k < plotAr.length; k += 1) {
+                    var x = -1;
+                    var y = -1;
+                    if (k==0) {
+                        t = plotAr[k];
+                        x = t[0];
+                        y = t[1];
+                    }
+                    else {
+                        t = plotAr[k][0];
+                        x = t[0];
+                        y = t[1];
+                    }
+                    ctx.fillStyle = mediumColor;
+                    ctx.fillRect(x, y, 10, 10);
+                }
+            }
+            visitorList.shift();
+        }
+    }
+
+    function populateVisitorList(numElements) {
+        const visitorList = [];
+
+        for (let i = 0; i < numElements; i++) {
+            const randomPair = [
+            Math.floor(Math.random() * 401), // Random number between 0 and 400
+            Math.floor(Math.random() * 401)  // Another random number between 0 and 400
+            ];
+            visitorList.push(randomPair);
+        }
+
+        return visitorList;
+    }
+    // call to draw room
+    drawGrid();
+    midLines();
+
+    // examples of added objects; we can pass info to it.
+    addArtifact(100,40);
+    addArtifact(30,60);
+    addArtifact(200,78);
+    addBLE(101,41);
+    var visitorList = populateVisitorList(200);
+    highColor = "red";
+    mediumColor = "yellow";
+    lowColor = "green";
+    highMin = 20;
+    lowMax = 10;
+    addVisitor(visitorList, highColor, mediumColor, lowColor, highMin, lowMax);
+    //addObject(170, 30, 100, 100, "red");
+</script>
+</body>
+</html>

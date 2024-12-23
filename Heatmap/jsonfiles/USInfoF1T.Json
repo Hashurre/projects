@@ -1,0 +1,178 @@
+{
+    "visitorsInformation": [
+        {
+            "visitorID": 2,
+            "bleDetected": [
+                {
+                    "bleID": 2,
+                    "RSSI": 12
+                },
+                {
+                    "bleID": 17,
+                    "RSSI": 24
+                },
+                {
+                    "bleID": 21,
+                    "RSSI": 5
+                },
+                {
+                    "bleID": 3,
+                    "RSSI": 30
+                },
+                {
+                    "bleID": 5,
+                    "RSSI": 22
+                }
+            ]
+        },
+        {
+            "visitorID": 10,
+            "bleDetected": [
+                {
+                    "bleID": 17,
+                    "RSSI": 50
+                },
+                {
+                    "bleID": 21,
+                    "RSSI": 3
+                },
+                {
+                    "bleID": 2,
+                    "RSSI": 13
+                },
+                {
+                    "bleID": 8,
+                    "RSSI": 18
+                }
+            ]
+        },
+        {
+            "visitorID": 23,
+            "bleDetected": [
+                {
+                    "bleID": 13,
+                    "RSSI": 35
+                },
+                {
+                    "bleID": 19,
+                    "RSSI": 27
+                },
+                {
+                    "bleID": 22,
+                    "RSSI": 19
+                }
+            ]
+        },
+        {
+            "visitorID": 34,
+            "bleDetected": [
+                {
+                    "bleID": 27,
+                    "RSSI": 40
+                },
+                {
+                    "bleID": 31,
+                    "RSSI": 25
+                },
+                {
+                    "bleID": 35,
+                    "RSSI": 15
+                }
+            ]
+        },
+        {
+            "visitorID": 45,
+            "bleDetected": [
+                {
+                    "bleID": 5,
+                    "RSSI": 28
+                },
+                {
+                    "bleID": 13,
+                    "RSSI": 34
+                },
+                {
+                    "bleID": 22,
+                    "RSSI": 20
+                },
+                {
+                    "bleID": 27,
+                    "RSSI": 10
+                }
+            ]
+        },
+        {
+            "visitorID": 56,
+            "bleDetected": [
+                {
+                    "bleID": 8,
+                    "RSSI": 17
+                },
+                {
+                    "bleID": 19,
+                    "RSSI": 23
+                },
+                {
+                    "bleID": 31,
+                    "RSSI": 9
+                }
+            ]
+        },
+        {
+            "visitorID": 67,
+            "bleDetected": [
+                {
+                    "bleID": 2,
+                    "RSSI": 14
+                },
+                {
+                    "bleID": 35,
+                    "RSSI": 20
+                }
+            ]
+        },
+        {
+            "visitorID": 78,
+            "bleDetected": [
+                {
+                    "bleID": 5,
+                    "RSSI": 25
+                },
+                {
+                    "bleID": 22,
+                    "RSSI": 30
+                }
+            ]
+        },
+        {
+            "visitorID": 89,
+            "bleDetected": [
+                {
+                    "bleID": 17,
+                    "RSSI": 40
+                },
+                {
+                    "bleID": 8,
+                    "RSSI": 29
+                }
+            ]
+        },
+        {
+            "visitorID": 100,
+            "bleDetected": [
+                {
+                    "bleID": 21,
+                    "RSSI": 10
+                },
+                {
+                    "bleID": 27,
+                    "RSSI": 18
+                },
+                {
+                	"bleID": 165,
+                	"RSSI": 12
+                }
+            ]
+        }
+    ]
+}

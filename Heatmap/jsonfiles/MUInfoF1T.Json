@@ -1,0 +1,120 @@
+{
+    "mDimensions": {
+        "widthOfM": 100,
+        "lengthOfM": 100
+    },
+    "mArtifacts": [
+        {
+            "artifactName": "Mona Lisa",
+            "artifactXC": 15,
+            "artifactYC": 20
+        },
+        {
+            "artifactName": "The School of Athens",
+            "artifactXC": 41,
+            "artifactYC": 81
+        },
+        {
+            "artifactName": "Starry Night",
+            "artifactXC": 23,
+            "artifactYC": 45
+        },
+        {
+            "artifactName": "The Scream",
+            "artifactXC": 62,
+            "artifactYC": 37
+        },
+        {
+            "artifactName": "The Persistence of Memory",
+            "artifactXC": 48,
+            "artifactYC": 67
+        },
+        {
+            "artifactName": "Girl with a Pearl Earring",
+            "artifactXC": 79,
+            "artifactYC": 25
+        },
+        {
+            "artifactName": "Guernica",
+            "artifactXC": 55,
+            "artifactYC": 15
+        },
+        {
+            "artifactName": "The Night Watch",
+            "artifactXC": 29,
+            "artifactYC": 88
+        },
+        {
+            "artifactName": "American Gothic",
+            "artifactXC": 12,
+            "artifactYC": 60
+        },
+        {
+            "artifactName": "The Last Supper",
+            "artifactXC": 85,
+            "artifactYC": 42
+        },
+        {
+            "artifactName": "The Kiss",
+            "artifactXC": 67,
+            "artifactYC": 50
+        }
+    ],
+    "mBLEBeacons": [
+        {
+            "bleID": 17,
+            "bleXC": 13,
+            "bleYC": 17
+        },
+        {
+            "bleID": 21,
+            "bleXC": 38,
+            "bleYC": 74
+        },
+        {
+            "bleID": 2,
+            "bleXC": 31,
+            "bleYC": 51
+        },
+        {
+            "bleID": 5,
+            "bleXC": 24,
+            "bleYC": 32
+        },
+        {
+            "bleID": 8,
+            "bleXC": 45,
+            "bleYC": 18
+        },
+        {
+            "bleID": 13,
+            "bleXC": 54,
+            "bleYC": 77
+        },
+        {
+            "bleID": 19,
+            "bleXC": 68,
+            "bleYC": 29
+        },
+        {
+            "bleID": 22,
+            "bleXC": 33,
+            "bleYC": 68
+        },
+        {
+            "bleID": 27,
+            "bleXC": 74,
+            "bleYC": 55
+        },
+        {
+            "bleID": 31,
+            "bleXC": 20,
+            "bleYC": 44
+        },
+        {
+            "bleID": 35,
+            "bleXC": 50,
+            "bleYC": 85
+        }
+    ]
+}

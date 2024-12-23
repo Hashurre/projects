@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>2D HeatMap</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style>
+    canvas {
+        border: 1px solid black;
+    }
+</style>
+</head>
+<body>
+<!-- hidden input which recieves settings info-->
+<input type="hidden" id="settings" th:value="${settings}" />
+<!-- hidden input which recieves artifacts info-->
+<input type="hidden" id="artifacts" th:value="${artifacts}" />
+<!-- hidden input which recieves beacons info-->
+<input type="hidden" id="bles" th:value="${beacons}" />
+<!-- hidden input which recieves visitors info-->
+<input type="hidden" id="visitors" th:value="${visitors}" />
+<!--Canvas element is used for drawing with dimensions n x n. This can be changed through passing info-->
+<canvas id="roomCanvas"></canvas>
+<!--JS script for logic-->
+<script>
+	//get visistors info from HTML element and split the string by comma - raw visitors list containing unformatted coordinates
+	var visitors = document.getElementById('visitors').value.split(',');
+	//get ble info from HTML element and split the string by comma
+	var bles = document.getElementById('bles').value.split(',');
+	//get settings info from HTML element and split the string by comma
+	var settings = document.getElementById('settings').value.split(',');
+	//get artifacts info from HTML element and split the string by comma
+	var artifacts = document.getElementById('artifacts').value.split(',');
+	//get canvas info from HTML element and split the string by comma
+    var canvasA = document.getElementById('roomCanvas');
+	//assign  height from settings list which has it stored at position 0
+    var height = parseInt(settings[0]);
+	//assign  width from settings list which has it stored at position 1
+    var width = parseInt(settings[1]);
+   	//assign canvas height 
+    canvasA.height = height;
+   	//assign canvas width 
+    canvasA.width = width;
+    //assign high color which is stored in settings at positon 3
+    highColor = settings[3];
+    //assign medium color which is stored in settings at positon 4
+    mediumColor = settings[4];
+    //assign low color whicgh is stored in settings at position 6
+    lowColor = settings[6];
+    //assign high minimum value which is stored in settings at position 2
+    highMin = parseInt(settings[2]);
+    //assign low maximum value which is stored in settings at position 5
+    lowMax = parseInt(settings[5]);
+    // variable canvas retrieves the canvas element from our HTML document
+    var canvas = document.getElementById('roomCanvas');
+    //variable ctx gets the context of the canvas
+    var ctx = canvas.getContext('2d');
+
+    // define 2 variables which sets room width and height. This can be changed through passing info
+    var roomWidth = width;
+    var roomHeight = height;
+   
+
+    // function to draw the room
+    function drawGrid() {
+        //clear the rectangle area/ make it fully transparent according to the dimensions.
+        ctx.clearRect(0, 0, roomWidth, roomHeight);
+
+        // draw room outline
+        ctx.strokeRect(0, 0, roomWidth, roomHeight);
+
+        // Daw vertical grid lines; starts with x iterates till room width; with step as 20px; Each iteration move drawing cursor to x, then draw line down to room height
+        for (var x = 0; x <= roomWidth; x += 20) {
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, roomHeight);
+        }
+        // Daw horizontal grid lines; starts with y iterates till room height; with step as 20px; Each iteration move drawing cursor to y, then draw line down to room width
+        for (var y = 0; y <= roomHeight; y += 20) {
+            ctx.moveTo(0, y);
+            ctx.lineTo(roomWidth, y);
+        }
+
+        //line colors
+        ctx.strokeStyle = "#ddd";
+        //draw said lines
+        ctx.stroke();
+    }
+    function midLines() {
+        //clear the rectangle area/ make it fully transparent according to the dimensions.
+        // draw room outline
+        
+        // Daw vertical grid lines; starts with x iterates till room width; with step as 20px; Each iteration move drawing cursor to x, then draw line down to room height
+        for (var x = 0; x <= roomWidth; x += 100) {
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, roomHeight);
+        }
+        // Daw horizontal grid lines; starts with y iterates till room height; with step as 20px; Each iteration move drawing cursor to y, then draw line down to room width
+        for (var y = 0; y <= roomHeight; y += 100) {
+            ctx.moveTo(0, y);
+            ctx.lineTo(roomWidth, y);
+        }
+
+        ctx.strokeStyle = "black";
+        ctx.stroke();
+
+        //line colors
+        //draw said lines
+
+    }
+
+    //function to add artifact given its name and coordinates
+    function addArtifact(name,x,y) {
+		//set color as blue
+        ctx.fillStyle = "blue";
+        //set size for artifact as 20x20
+        ctx.fillRect(x,y,20,20);
+        //set text color as black
+        ctx.fillStyle = "black";
+        //set font
+        ctx.font = "15px Arial";
+        //set the text inside artifact as the first letter within the name
+        ctx.fillText(name.substring(0,1),x,y+15);
+    }
+    //function to add BLE given its id, and coordinates
+    function addBLE(id,x,y) {
+		//set color as purple		
+        ctx.fillStyle = "purple";
+        //set size for artifact as 5x5
+        ctx.fillRect(x,y,5,5);
+        //set text color as black        
+        ctx.fillStyle = "black";
+        //set font
+        ctx.font = "5px Arial";
+        //set the text inside ble as the first number within the ID
+        ctx.fillText(id.substring(0,1),x,y+3);
+    }
+    //function to add all visistors given a list of visistors, color of high sector, color of medium sector, color of low sectors, minimum pop. of high sector, maximum pop. of low sector
+    function addVisitor(visitorList, highColor, mediumColor, lowColor, highMin, lowMax) {
+		//while the visistor list is greater than 0
+        while (visitorList.length > 0) {
+			//find a pair of coordinates from visitor's list'
+            var pair = visitorList[0];
+            //make a variable plot array which plots each coordinate within it
+            plotAr = [pair];
+            //make a variable to hold count of how many visistors within an area 
+            var count = 1;
+            //iterate to the number of visistors
+            for (var j = 1; j < visitorList.length; j += 1) {
+				//identify which column the chosen pair is in
+                col = pair[0];
+                //identify which row the chosen pair is in
+                row = pair[1];
+                //create a zone around the pair
+                var zone = [
+                    Math.round(col / 100) * 100,
+                    Math.round(row / 100) * 100,
+                ];
+                //choose another pair within the visistorList
+                var otherPairs = visitorList[j];
+                //identify the column it is in
+                oCol = otherPairs[0];
+                //identify the row it is in
+                oRow = otherPairs[1];
+                //create a zone around the second pair
+                var oZone = [
+                    Math.round(oCol / 100) * 100,
+                    Math.round(oRow / 100) * 100,
+                ];
+                //if ever, the zone of pair 1 is the same as the zone of pair 2
+                if (zone[0] == oZone[0] && zone[1] == oZone[1]) {
+					//create an array which splices the list at where the second pair occurs. The returned array contains the same zone pair's coordinates. Also it subtracts the same zone pair from the original visistorsList
+                    sameZonePair = visitorList.splice(j, 1);
+                    //push this same zone pair into our array which contains the elements we will plot
+                    plotAr.push(sameZonePair);
+                    //add 1 to the count which keeps in track of how many visistors inside the same zone
+                    count += 1;
+                    //subtract 1 as we have subtracted the visitorslist length by removing an element. we adjust index.
+                    j -= 1;
+                }
+            }
+            //if, ever, count of same zone pairs is greater than/= the minimum value for the high sector
+            if (count >= highMin) {
+				//loop for the length of the array of elements to be plotted
+                for (k = 0; k < plotAr.length; k += 1) {
+					//x coord
+                    var x = -1;
+                    //y coord
+                    var y = -1;
+                    //if ever, we are at the start of the iteration
+                    if (k==0) {
+						//grab t which is the array containing coordinates x,y at position k of plotAr
+                        t = plotAr[k];
+                        //assign coordinates
+                        x = t[0];
+                        y = t[1];
+                    }
+                    else {
+						//other wise the array containing coordinates will be found at position k of plotAr at position 0
+                        t = plotAr[k][0];
+                        //assign coordinates
+                        x = t[0];
+                        y = t[1];
+                    }
+                    //when coordinates are set assign  the color of high
+                    ctx.fillStyle = highColor;
+                    //fill the rectange 10 x 10 
+                    ctx.fillRect(x, y, 10, 10);
+                }
+            }
+            //if, ever, count of same zone pairs is less than/= the maximum value for the low sector
+            else if (count <= lowMax) {
+				//loop for the length of the array of elements to be plotted
+                for (k = 0; k < plotAr.length; k += 1) {
+					//x coord
+                    var x = -1;
+                    //y coord
+                    var y = -1;
+                    //if ever, we are at the start of the iteration
+                    if (k==0) {
+						//grab t which is the array containing coordinates x,y at position k of plotAr
+                        t = plotAr[k];
+                        //assign coordinates
+                        x = t[0];
+                        y = t[1];
+                    }
+                    else {
+						//other wise the array containing coordinates will be found at position k of plotAr at position 0
+                        t = plotAr[k][0];
+                        //assign coordinates
+                        x = t[0];
+                        y = t[1];
+                    }
+                    //when coordinates are set assign  the color of low
+                    ctx.fillStyle = lowColor;
+                    //fill the rectange 10 x 10 
+                    ctx.fillRect(x, y, 10, 10);
+                }
+            }
+            //otherwise, the count of same zone pairs must be in the range of the medium sector
+            else {
+				//loop for the length of the array of elements to be plotted
+                for (k = 0; k < plotAr.length; k += 1) {
+					//x coord
+                    var x = -1;
+                    //y coord
+                    var y = -1;
+                    //if ever, we are at the start of the iteration 
+                    if (k==0) {
+						//grab t which is the array containing coordinates x,y at position k of plotAr
+                        t = plotAr[k];
+                        //assign coordinates
+                        x = t[0];
+                        y = t[1];
+                    }
+                    else {
+						//other wise the array containing coordinates will be found at position k of plotAr at position 0
+                        t = plotAr[k][0];
+                        //assign coordinates
+                        x = t[0];
+                        y = t[1];
+                    }
+                    //when coordinates are set assign  the color of low
+                    ctx.fillStyle = mediumColor;
+                    //fill the rectange 10 x 10 
+                    ctx.fillRect(x, y, 10, 10);
+                }
+            }
+            //shift/pop the first visistor to inspect the next element
+            visitorList.shift();
+        }
+    }
+    // call to draw room
+    drawGrid();
+    midLines();
+    
+    // add artifacts to map
+    for(a = 0; a < artifacts.length-2; a++) {
+		addArtifact((artifacts[a]),parseInt(artifacts[a+1]),parseInt(artifacts[a+2]));
+	}
+	//add bles to map
+	for (b = 0; b < bles.length-2; b++) {
+		addBLE((bles[b]),parseInt(bles[b+1]),parseInt(bles[b+2]));
+	}
+	//list of visitors formatted in terms of coordinate pairs
+	visList = [];
+	//pair index
+	var pairInd = 0;
+	//iterate till half of the raw visitors list
+	for(v = 0; v < visitors.length/2; v+=1) {
+		//for every index v make a pair of coordinates from the raw visitors list
+		visList[v] = [visitors[pairInd],visitors[pairInd+1]];
+		//increment pairindex by 2
+		pairInd+=2;
+	}
+	//add all of the visitors
+    addVisitor(visList, highColor, mediumColor, lowColor, highMin, lowMax);
+</script>
+</body>
+</html>
