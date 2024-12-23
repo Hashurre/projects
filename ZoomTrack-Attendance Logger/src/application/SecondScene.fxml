@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="644.0" prefWidth="931.0" style="-fx-background-color: #427D9D;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SecondController">
+   <children>
+      <Label fx:id="labelInstruction" alignment="CENTER" layoutX="47.0" layoutY="-75.0" prefHeight="99.0" prefWidth="838.0" style="-fx-background-color: transparent;" text="Please drop a zoom chat file" textAlignment="CENTER" textFill="#ddf2fd">
+         <font>
+            <Font name="Bebas Neue Regular" size="75.0" />
+         </font>
+         <effect>
+            <DropShadow spread="0.61">
+               <input>
+                  <Glow level="0.26" />
+               </input>
+            </DropShadow>
+         </effect>
+      </Label>
+      <Label fx:id="plus" alignment="CENTER" layoutX="90.0" layoutY="617.0" onDragDropped="#fileDrop" onDragOver="#fileDrag" prefHeight="388.0" prefWidth="751.0" style="-fx-background-color: #164863;" text="+" textAlignment="CENTER" textFill="#ddf2fd">
+         <font>
+            <Font name="Bebas Neue Regular" size="300.0" />
+         </font>
+         <effect>
+            <DropShadow spread="0.61">
+               <input>
+                  <Glow level="0.26" />
+               </input>
+            </DropShadow>
+         </effect>
+      </Label>
+      <ImageView fx:id="arrow" fitHeight="150.0" fitWidth="200.0" layoutX="931.0" layoutY="65.0" onMouseClicked="#nextScene" onMouseEntered="#hoverGreen" onMouseExited="#hoverOffBlue" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../rightArrow.png" />
+         </image>
+         <effect>
+            <ColorAdjust brightness="-0.32" contrast="0.3" hue="0.38" />
+         </effect>
+      </ImageView>
+   </children>
+</AnchorPane>
